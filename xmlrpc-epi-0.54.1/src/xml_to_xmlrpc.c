@@ -49,6 +49,7 @@ static const char rcsid[] = "#(@) $Id: xml_to_xmlrpc.c,v 1.10 2008/04/16 13:03:1
 #define ELEM_FAULTCODE      "faultCode"
 #define ELEM_FAULTSTRING    "faultString"
 #define ELEM_I4             "i4"
+#define ELEM_I8             "i8"
 #define ELEM_INT            "int"
 #define ELEM_MEMBER         "member"
 #define ELEM_METHODCALL     "methodCall"
@@ -113,7 +114,8 @@ XMLRPC_VALUE xml_element_to_XMLRPC_REQUEST_worker(XMLRPC_REQUEST request, XMLRPC
             iter = (xml_element*)Q_Next(&el->children);
          }
         }
-        else if (!strcmp(el->name, ELEM_STRING) || 
+        else if (!strcmp(el->name, ELEM_STRING) ||
+				 !strcmp(el->name, ELEM_I8)     ||		// No <i8> support, but convert to string
                  (!strcmp(el->name, ELEM_VALUE) && Q_Size(&el->children) == 0)) {
          XMLRPC_SetValueString(current_val, el->text.str, el->text.len);
         }
