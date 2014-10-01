@@ -36,6 +36,10 @@ copy_headers ()
 }
 
 stage="$(pwd)/stage"
+
+build=${AUTOBUILD_BUILD_ID:=0}
+echo "${XMLRPCEPI_VERSION}.${build}" > "${stage}/VERSION.txt"
+
 pushd "$XMLRPCEPI_SOURCE_DIR"
     case "$AUTOBUILD_PLATFORM" in
         "windows")
@@ -53,7 +57,7 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
             copy_headers "$stage/include/xmlrpc-epi"
         ;;
         "darwin")
-            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5'
+            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.7.sdk -mmacosx-version-min=10.7'
             CFLAGS="$opts" CXXFLAGS="$opts" LDFLAGS="$opts" ./configure --prefix="$stage" \
                 --with-expat=no \
                 --with-expat-lib="$stage/packages/lib/release/libexpat.dylib" \
