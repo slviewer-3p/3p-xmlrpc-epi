@@ -34,9 +34,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f725a725a20514963e3aa35fd8c35481</string>
+              <string>1ed2b8d927659b331951f2a7bf1c4d73</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-expat/rev/246510/arch/Linux/installer/expat-2.0.1-linux-20111209.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/expat_3p-update-expat/rev/295191/arch/Linux/installer/expat-2.0.1.295191-linux-295191.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -55,7 +55,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>2.0.1.295018</string>
+        <string>2.0.1.295191</string>
       </map>
     </map>
     <key>package_description</key>
