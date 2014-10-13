@@ -10,7 +10,7 @@ set -e
 XMLRPCEPI_VERSION="0.54.1"
 XMLRPCEPI_SOURCE_DIR="xmlrpc-epi-$XMLRPCEPI_VERSION"
 
-if [ -z "$AUTOBUILD" ] ; then 
+if [ -z "$AUTOBUILD" ] ; then
     fail
 fi
 
@@ -44,7 +44,7 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
     case "$AUTOBUILD_PLATFORM" in
         "windows")
             load_vsvars
-            
+
             build_sln "xmlrpcepi.sln" "Debug|Win32" "xmlrpcepi"
             build_sln "xmlrpcepi.sln" "Release|Win32" "xmlrpcepi"
             mkdir -p "$stage/lib/debug"
@@ -57,7 +57,7 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
             copy_headers "$stage/include/xmlrpc-epi"
         ;;
         "darwin")
-            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.7.sdk -mmacosx-version-min=10.7'
+            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.7'
             CFLAGS="$opts" CXXFLAGS="$opts" LDFLAGS="$opts" ./configure --prefix="$stage" \
                 --with-expat=no \
                 --with-expat-lib="$stage/packages/lib/release/libexpat.dylib" \
