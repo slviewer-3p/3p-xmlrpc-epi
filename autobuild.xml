@@ -46,9 +46,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d95c1e91df370e2389fd8a6eec97e4a8</string>
+              <string>05f20b4d348944cdedaa4826d6e99098</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-expat/rev/246510/arch/CYGWIN/installer/expat-2.0.1-windows-20111209.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/expat_3p-update-expat/rev/295509/arch/CYGWIN/installer/expat-2.0.1.295509-windows-295509.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
