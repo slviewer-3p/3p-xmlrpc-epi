@@ -42,17 +42,18 @@ echo "${XMLRPCEPI_VERSION}.${build}" > "${stage}/VERSION.txt"
 
 pushd "$XMLRPCEPI_SOURCE_DIR"
     case "$AUTOBUILD_PLATFORM" in
-        "windows")
+        windows*)
             load_vsvars
 
-            build_sln "xmlrpcepi.sln" "Debug|Win32" "xmlrpcepi"
-            build_sln "xmlrpcepi.sln" "Release|Win32" "xmlrpcepi"
-            mkdir -p "$stage/lib/debug"
+            build_sln "xmlrpcepi.sln" "Release|$AUTOBUILD_WIN_VSPLATFORM" "xmlrpcepi"
             mkdir -p "$stage/lib/release"
-            cp "Debug/xmlrpcepi.lib" \
-                "$stage/lib/debug/xmlrpc-epid.lib"
-            cp "Release/xmlrpcepi.lib" \
-                "$stage/lib/release/xmlrpc-epi.lib"
+
+            if [ "$AUTOBUILD_ADDRSIZE" = 32 ]
+            then cp "Release/xmlrpcepi.lib" "$stage/lib/release/xmlrpc-epi.lib"
+            else cp "x64/Release/xmlrpcepi.lib" "$stage/lib/release/xmlrpc-epi.lib"
+            fi
+
+            
             mkdir -p "$stage/include/xmlrpc-epi"
             copy_headers "$stage/include/xmlrpc-epi"
         ;;
