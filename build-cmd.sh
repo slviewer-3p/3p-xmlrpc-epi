@@ -10,7 +10,7 @@ set -e
 set -u
 
 XMLRPCEPI_SOURCE_DIR="xmlrpc-epi"
-XMLRPCEPI_VERSION="$(sed -n 's/VERSION=\(.*\)$/\1/p' "$XMLRPCEPI_SOURCE_DIR/configure")"
+XMLRPCEPI_VERSION="$(sed -n 's/^ *VERSION=\(.*\)$/\1/p' "$XMLRPCEPI_SOURCE_DIR/configure")"
 
 if [ -z "$AUTOBUILD" ] ; then
     fail
