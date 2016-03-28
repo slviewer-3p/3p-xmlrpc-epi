@@ -6,22 +6,29 @@ cd "$(dirname "$0")"
 set -x
 # make errors fatal
 set -e
+# complain about unset env variables
+set -u
 
-XMLRPCEPI_VERSION="0.54.1"
-XMLRPCEPI_SOURCE_DIR="xmlrpc-epi-$XMLRPCEPI_VERSION"
+XMLRPCEPI_SOURCE_DIR="xmlrpc-epi"
+XMLRPCEPI_VERSION="$(sed -n 's/VERSION=\(.*\)$/\1/p' "$XMLRPCEPI_SOURCE_DIR/configure")"
 
 if [ -z "$AUTOBUILD" ] ; then
     fail
 fi
 
 if [ "$OSTYPE" = "cygwin" ] ; then
-    export AUTOBUILD="$(cygpath -u $AUTOBUILD)"
+    autobuild="$(cygpath -u $AUTOBUILD)"
+else
+    autobuild="$AUTOBUILD"
 fi
 
 # load autbuild provided shell functions and variables
 set +x
-eval "$("$AUTOBUILD" source_environment)"
+eval "$("$autobuild" source_environment)"
 set -x
+
+# set LL_BUILD and friends
+set_build_variables convenience Release
 
 copy_headers ()
 {
@@ -57,8 +64,8 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
             mkdir -p "$stage/include/xmlrpc-epi"
             copy_headers "$stage/include/xmlrpc-epi"
         ;;
-        "darwin")
-            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.7'
+        darwin*)
+            opts="-arch $AUTOBUILD_CONFIGURE_ARCH $LL_BUILD"
             CFLAGS="$opts" CXXFLAGS="$opts" LDFLAGS="$opts" ./configure --prefix="$stage" \
                 --with-expat=no \
                 --with-expat-lib="$stage/packages/lib/release/libexpat.dylib" \
@@ -76,8 +83,8 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
             install_name_tool -id "@executable_path/../Resources/libxmlrpc-epi.0.dylib" "$stage/lib/release/libxmlrpc-epi.0.dylib"
             install_name_tool -change "/usr/lib/libexpat.1.dylib" "@executable_path/../Resources/libexpat.1.dylib" "$stage/lib/release/libxmlrpc-epi.0.dylib"
         ;;
-        "linux")
-            opts='-m32'
+        linux*)
+            opts="-m$AUTOBUILD_ADDRSIZE $LL_BUILD"
             CFLAGS="$opts" CXXFLAGS="$opts" ./configure --prefix="$stage" \
                 --with-expat=no \
                 --with-expat-lib="$stage/packages/lib/release/libexpat.so" \
@@ -97,4 +104,3 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
 popd
 
 pass
-
