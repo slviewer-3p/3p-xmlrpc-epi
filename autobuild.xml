@@ -22,9 +22,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>452d1910ef853329cd59858e6c5b2c48</string>
+              <string>596338c31aca4068ae1ece48f06e8fc1</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/expat_3p-update-expat/rev/297014/arch/Darwin/installer/expat-2.0.1.297014-darwin-297014.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-update-expat/rev/315478/arch/Darwin/installer/expat-2.0.1.315478-darwin-315478.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -34,9 +34,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f546615d76bc0f9e8bc2b9ef89f0ca86</string>
+              <string>163d5b23acca863d10facbee89406f13</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/expat_3p-update-expat/rev/297014/arch/Linux/installer/expat-2.0.1.297014-linux-297014.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-update-expat/rev/315478/arch/Linux/installer/expat-2.0.1.315478-linux-315478.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -46,16 +46,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c70c72a8a0a1e508691a9b35739b373f</string>
+              <string>440e96fdb10e8a4c807eee4091980294</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/expat_3p-update-expat/rev/297014/arch/CYGWIN/installer/expat-2.0.1.297014-windows-297014.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-update-expat/rev/315478/arch/CYGWIN/installer/expat-2.0.1.315478-windows-315478.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.0.1.297014</string>
+        <string>2.0.1.315478</string>
       </map>
     </map>
     <key>package_description</key>
