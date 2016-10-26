@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 cd "$(dirname "$0")"
 
 # turn on verbose debugging output for parabuild logs.
-set -x
+exec 4>&1; export BASH_XTRACEFD=4; set -x
 # make errors fatal
 set -e
 # complain about unset env variables
@@ -13,7 +13,7 @@ XMLRPCEPI_SOURCE_DIR="xmlrpc-epi"
 XMLRPCEPI_VERSION="$(sed -n 's/^ *VERSION=\([0-9.]*\)$/\1/p' "$XMLRPCEPI_SOURCE_DIR/configure")"
 
 if [ -z "$AUTOBUILD" ] ; then
-    fail
+    exit 1
 fi
 
 if [ "$OSTYPE" = "cygwin" ] ; then
@@ -22,13 +22,12 @@ else
     autobuild="$AUTOBUILD"
 fi
 
-# load autbuild provided shell functions and variables
-set +x
-eval "$("$autobuild" source_environment)"
-set -x
+stage="$(pwd)/stage"
 
-# set LL_BUILD and friends
-set_build_variables convenience Release
+# load autobuild provided shell functions and variables
+source_environment_tempfile="$stage/source_environment.sh"
+"$autobuild" source_environment > "$source_environment_tempfile"
+. "$source_environment_tempfile"
 
 copy_headers ()
 {
@@ -41,8 +40,6 @@ copy_headers ()
     cp src/xmlrpc_introspection.h $1
     cp src/xml_to_xmlrpc.h $1
 }
-
-stage="$(pwd)/stage"
 
 build=${AUTOBUILD_BUILD_ID:=0}
 echo "${XMLRPCEPI_VERSION}.${build}" > "${stage}/VERSION.txt"
@@ -65,7 +62,7 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
             copy_headers "$stage/include/xmlrpc-epi"
         ;;
         darwin*)
-            opts="-arch $AUTOBUILD_CONFIGURE_ARCH $LL_BUILD"
+            opts="-arch $AUTOBUILD_CONFIGURE_ARCH $LL_BUILD_RELEASE"
             CFLAGS="$opts" CXXFLAGS="$opts" LDFLAGS="$opts" ./configure --prefix="$stage" \
                 --with-expat=no \
                 --with-expat-lib="$stage/packages/lib/release/libexpat.dylib" \
@@ -84,7 +81,7 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
             install_name_tool -change "/usr/lib/libexpat.1.dylib" "@executable_path/../Resources/libexpat.1.dylib" "$stage/lib/release/libxmlrpc-epi.0.dylib"
         ;;
         linux*)
-            opts="-m$AUTOBUILD_ADDRSIZE $LL_BUILD"
+            opts="-m$AUTOBUILD_ADDRSIZE $LL_BUILD_RELEASE"
             CFLAGS="$opts" CXXFLAGS="$opts" ./configure --prefix="$stage" \
                 --with-expat=no \
                 --with-expat-lib="$stage/packages/lib/release/libexpat.so" \
@@ -102,5 +99,3 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
     mkdir -p "$stage/LICENSES"
     cp "COPYING" "$stage/LICENSES/xmlrpc-epi.txt"
 popd
-
-pass
