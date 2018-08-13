@@ -1,27 +1,33 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 cd "$(dirname "$0")"
 
 # turn on verbose debugging output for parabuild logs.
-set -x
+exec 4>&1; export BASH_XTRACEFD=4; set -x
 # make errors fatal
 set -e
+# complain about unset env variables
+set -u
 
-XMLRPCEPI_VERSION="0.54.1"
-XMLRPCEPI_SOURCE_DIR="xmlrpc-epi-$XMLRPCEPI_VERSION"
+XMLRPCEPI_SOURCE_DIR="xmlrpc-epi"
+XMLRPCEPI_VERSION="$(sed -n 's/^ *VERSION=\([0-9.]*\)$/\1/p' "$XMLRPCEPI_SOURCE_DIR/configure")"
 
 if [ -z "$AUTOBUILD" ] ; then
-    fail
+    exit 1
 fi
 
 if [ "$OSTYPE" = "cygwin" ] ; then
-    export AUTOBUILD="$(cygpath -u $AUTOBUILD)"
+    autobuild="$(cygpath -u $AUTOBUILD)"
+else
+    autobuild="$AUTOBUILD"
 fi
 
-# load autbuild provided shell functions and variables
-set +x
-eval "$("$AUTOBUILD" source_environment)"
-set -x
+stage="$(pwd)/stage"
+
+# load autobuild provided shell functions and variables
+source_environment_tempfile="$stage/source_environment.sh"
+"$autobuild" source_environment > "$source_environment_tempfile"
+. "$source_environment_tempfile"
 
 copy_headers ()
 {
@@ -35,29 +41,28 @@ copy_headers ()
     cp src/xml_to_xmlrpc.h $1
 }
 
-stage="$(pwd)/stage"
-
 build=${AUTOBUILD_BUILD_ID:=0}
 echo "${XMLRPCEPI_VERSION}.${build}" > "${stage}/VERSION.txt"
 
 pushd "$XMLRPCEPI_SOURCE_DIR"
     case "$AUTOBUILD_PLATFORM" in
-        "windows")
+        windows*)
             load_vsvars
 
-            build_sln "xmlrpcepi.sln" "Debug|Win32" "xmlrpcepi"
-            build_sln "xmlrpcepi.sln" "Release|Win32" "xmlrpcepi"
-            mkdir -p "$stage/lib/debug"
+            build_sln "xmlrpcepi.sln" "Release|$AUTOBUILD_WIN_VSPLATFORM" "xmlrpcepi"
             mkdir -p "$stage/lib/release"
-            cp "Debug/xmlrpcepi.lib" \
-                "$stage/lib/debug/xmlrpc-epid.lib"
-            cp "Release/xmlrpcepi.lib" \
-                "$stage/lib/release/xmlrpc-epi.lib"
+
+            if [ "$AUTOBUILD_ADDRSIZE" = 32 ]
+            then cp "Release/xmlrpcepi.lib" "$stage/lib/release/xmlrpc-epi.lib"
+            else cp "x64/Release/xmlrpcepi.lib" "$stage/lib/release/xmlrpc-epi.lib"
+            fi
+
+            
             mkdir -p "$stage/include/xmlrpc-epi"
             copy_headers "$stage/include/xmlrpc-epi"
         ;;
-        "darwin")
-            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.7'
+        darwin*)
+            opts="-arch $AUTOBUILD_CONFIGURE_ARCH $LL_BUILD_RELEASE"
             CFLAGS="$opts" CXXFLAGS="$opts" LDFLAGS="$opts" ./configure --prefix="$stage" \
                 --with-expat=no \
                 --with-expat-lib="$stage/packages/lib/release/libexpat.dylib" \
@@ -75,8 +80,8 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
             install_name_tool -id "@executable_path/../Resources/libxmlrpc-epi.0.dylib" "$stage/lib/release/libxmlrpc-epi.0.dylib"
             install_name_tool -change "/usr/lib/libexpat.1.dylib" "@executable_path/../Resources/libexpat.1.dylib" "$stage/lib/release/libxmlrpc-epi.0.dylib"
         ;;
-        "linux")
-            opts='-m32'
+        linux*)
+            opts="-m$AUTOBUILD_ADDRSIZE $LL_BUILD_RELEASE"
             CFLAGS="$opts" CXXFLAGS="$opts" ./configure --prefix="$stage" \
                 --with-expat=no \
                 --with-expat-lib="$stage/packages/lib/release/libexpat.so" \
@@ -94,6 +99,3 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
     mkdir -p "$stage/LICENSES"
     cp "COPYING" "$stage/LICENSES/xmlrpc-epi.txt"
 popd
-
-pass
-
