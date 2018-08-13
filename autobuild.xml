@@ -29,33 +29,69 @@
             <key>name</key>
             <string>darwin</string>
           </map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>fd182ab5bed66c94899dec3035310945</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/384/954/expat-2.1.1.500375-darwin64-500375.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
           <key>linux</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>163d5b23acca863d10facbee89406f13</string>
+              <string>387c90b9bb5ec412587fbe7a56261dd1</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-update-expat/rev/315478/arch/Linux/installer/expat-2.0.1.315478-linux-315478.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-expat/rev/314211/arch/Linux/installer/expat-2.1.1.314211-linux-314211.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>5e1f025d1cebd12db542080aa755257f</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/380/943/expat-2.1.1.500375-linux64-500375.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>440e96fdb10e8a4c807eee4091980294</string>
+              <string>09ece3f04ec0bd21dd0d401235aa20f7</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-update-expat/rev/315478/arch/CYGWIN/installer/expat-2.0.1.315478-windows-315478.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/383/949/expat-2.1.1.500375-windows-500375.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
           </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>5c82a3482799fe22b3c8fcb317f87bbb</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/382/946/expat-2.1.1.500375-windows64-500375.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
         </map>
         <key>version</key>
-        <string>2.0.1.315478</string>
+        <string>2.1.1.500375</string>
       </map>
     </map>
     <key>package_description</key>
@@ -167,7 +203,6 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/debug/*.lib</string>
             <string>lib/release/*.lib</string>
           </array>
           <key>name</key>
