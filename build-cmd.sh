@@ -82,9 +82,9 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
         ;;
         linux*)
             opts="-m$AUTOBUILD_ADDRSIZE $LL_BUILD_RELEASE"
-            CFLAGS="$opts" CXXFLAGS="$opts" ./configure --prefix="$stage" \
-                --with-expat=no \
-                --with-expat-lib="$stage/packages/lib/release/libexpat.so" \
+            CFLAGS="$opts" CXXFLAGS="$opts" LIBS="$stage/packages/lib/release/libexpat.a" ./configure --prefix="$stage" \
+                  --with-expat="no" \
+                --with-expat-lib="$stage/packages/lib/release/libexpat.a" \
                 --with-expat-inc="$stage/packages/include/expat"
             make
             make install
