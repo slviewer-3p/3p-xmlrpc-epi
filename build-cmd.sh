@@ -81,6 +81,7 @@ pushd "$XMLRPCEPI_SOURCE_DIR"
             install_name_tool -change "/usr/lib/libexpat.1.dylib" "@executable_path/../Resources/libexpat.1.dylib" "$stage/lib/release/libxmlrpc-epi.0.dylib"
         ;;
         linux*)
+            autoreconf -vif
             opts="${AUTOBUILD_GCC_ARCH} $LL_BUILD_RELEASE"
             CFLAGS="$opts" CXXFLAGS="$opts" LIBS="$stage/packages/lib/release/libexpat.a" ./configure --prefix="$stage" \
                   --with-expat="no" \
